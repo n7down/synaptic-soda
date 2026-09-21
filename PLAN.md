@@ -93,7 +93,7 @@ Two budget scenarios: **budget** (AliExpress pumps, 3-4 week shipping) and
 |----------------------------------------------------|-----|-------------------|--------------|-------------|---------------------------|
 | ESP32-S3-DevKitC-1 (32MB Flash, 16MB PSRAM)       | 1   | $19.95            | $19.95       | $19.95      | Adafruit #5364            |
 | SPH0645LM4H I2S MEMS Microphone Breakout           | 1   | $6.95             | $6.95        | $6.95       | Adafruit #3421            |
-| Mini peristaltic pumps 12V (syrups + spares)       | 27  | ~$5               | $135.00      | $135.00     | AliExpress (INTLLAB DS-100 or clone) |
+| Kamoer NKP 12V geared peristaltic pump (syrups+spares) | 27 | $9.98          | $269.46      | $269.46     | Amazon B092Z9HR3D         |
 | Peristaltic pump 12V - soda water                  | 1   | $24.95            | $24.95       | $24.95      | Adafruit #1150            |
 | 3.5" ILI9488 TFT touchscreen + XPT2046 touch (SPI)| 1   | ~$15              | $15.00       | $15.00      | AliExpress                |
 | SunFounder 5V 8-channel relay board                | 3   | $9.89             | $29.67       | $29.67      | Amazon B00DR9SE4A         |
@@ -103,9 +103,9 @@ Two budget scenarios: **budget** (AliExpress pumps, 3-4 week shipping) and
 | Food-grade silicone tubing (1m rolls)              | 3   | $3.50             | $10.50       | $10.50      | Adafruit #3659            |
 | Enclosure (wood/acrylic/3D print)                  | 1   | $30-80            | $30.00       | $80.00      | Local/hardware store      |
 | Misc (wiring, connectors, hot glue)                | —   | —                 | $20.00       | $20.00      | Hardware store            |
-| **Electronics subtotal**                           |     |                   | **~$328**    | **~$328**   |                           |
+| **Electronics subtotal**                           |     |                   | **~$462**    | **~$462**   |                           |
 | Syrups (Torani/Monin 750ml x24, ~$10 each)         | 24  | ~$10              | $240.00      | $240.00     | Grocery/online            |
-| **Grand total**                                    |     |                   | **~$568**    | **~$568**   |                           |
+| **Grand total**                                    |     |                   | **~$702**    | **~$702**   |                           |
 
 ### Power supply note
 The Adafruit 12V 5A supply ($24.95) is sufficient because pumps dispense
@@ -114,30 +114,23 @@ at 1-2 pumps simultaneously (~1-2A). If you ever want parallel dispensing,
 upgrade to a 12V 10A supply (~$20-25 on AliExpress).
 
 ### Pump sourcing notes
-- Syrups: search `12V peristaltic pump food grade silicone tube` on AliExpress (~$3-5 each)
-- Water: search `12V diaphragm pump food grade self-priming`
-- Brands: INTLLAB, Gikfun, or generic dosing pump listings
-- **Order 3-4 spare syrup pumps** — they break, go out of stock, and are hard to replace mid-build
-- **Test pump direction before installing** — small peristaltic pumps are often assembled in random directions
-  at the factory; test each one, mark direction, and flip the rotor mechanically if backwards (just open
-  the head and reverse the roller insert — no tools needed)
 
-### Syrup pump identification (from reference build video)
-The pump used in the reference video has these identifying features:
-- **Clear/transparent pump head** with visible rollers inside
-- **DC motor sits directly on top** of the head (inline, not offset)
-- **Very small** — roughly fingertip-sized, ~28-32mm head diameter
-- **3-wire connector** (red, blue, yellow) on the motor
-- Cost up to $25 each on Amazon; available cheaper on AliExpress
+**Syrup pumps (x27 including spares):**
+- **Kamoer NKP 12V** — Amazon B092Z9HR3D — $9.98 each
+- 12V DC, geared, 33-60 ml/min, BPT food-safe tubing, 3 rotors, reversible
+- Kamoer is a reputable brand used in aquarium dosing and lab work
+- Amazon Prime shipping, 30-day free returns
+- Buy 27 (24 + 3 spares) — pumps break and go out of stock mid-build
+- **Test pump direction before installing** — if backwards, swap the two motor wires
+  (red/black) — no need to open the pump head on the Kamoer NKP
 
-Most likely model: **INTLLAB DS-100** or a close clone
-Search terms:
-- `micro peristaltic pump clear head DC`
-- `mini peristaltic dosing pump transparent head`
-- `INTLLAB DS-100 peristaltic pump`
-- `Kamoer micro peristaltic pump`
+**Soda water pump (x1):**
+- **Adafruit Peristaltic Pump 12V** — Adafruit #1150 — $24.95
+- High flow 100ml/min, food-safe silicone tubing, self-priming
+- Replace included tubing with FDA/USDA compliant tubing from McMaster-Carr
+  before use (Adafruit explicitly notes included tubing is not food-certified)
 
-Check the reference video description for a direct part link:
+Check the reference video description for additional part links:
 https://www.youtube.com/watch?v=kBb56968ixI
 
 ### Syrup sourcing notes
