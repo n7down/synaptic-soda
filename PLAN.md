@@ -97,15 +97,15 @@ Two budget scenarios: **budget** (AliExpress pumps, 3-4 week shipping) and
 | 12V diaphragm pump (soda water)                    | 1   | ~$12-15           | $15.00       | $15.00      | AliExpress                |
 | 3.5" ILI9488 TFT touchscreen + XPT2046 touch (SPI)| 1   | ~$15              | $15.00       | $15.00      | AliExpress                |
 | 8-channel relay boards (5V trigger)                | 3   | ~$5               | $15.00       | $15.00      | AliExpress                |
-| PCF8574 I2C I/O expanders                          | 3   | ~$2               | $6.00        | $6.00       | AliExpress                |
+| MCP23017 I2C GPIO Expander (STEMMA QT)             | 2   | $5.95             | $11.90       | $11.90      | Adafruit #5346            |
 | 12V 5A switching power supply                      | 1   | $24.95            | $24.95       | $24.95      | Adafruit #352             |
 | 5V USB power supply (ESP32 + logic)                | 1   | ~$8               | $8.00        | $8.00       | AliExpress                |
 | Food-grade silicone tubing (1m rolls)              | 3   | $3.50             | $10.50       | $10.50      | Adafruit #3659            |
 | Enclosure (wood/acrylic/3D print)                  | 1   | $30-80            | $30.00       | $80.00      | Local/hardware store      |
 | Misc (wiring, connectors, hot glue)                | —   | —                 | $20.00       | $20.00      | Hardware store            |
-| **Electronics subtotal**                           |     |                   | **~$304**    | **~$893**   |                           |
+| **Electronics subtotal**                           |     |                   | **~$301**    | **~$889**   |                           |
 | Syrups (Torani/Monin 750ml x24, ~$10 each)         | 24  | ~$10              | $240.00      | $240.00     | Grocery/online            |
-| **Grand total**                                    |     |                   | **~$544**    | **~$1,133** |                           |
+| **Grand total**                                    |     |                   | **~$541**    | **~$1,129** |                           |
 
 ### Power supply note
 The Adafruit 12V 5A supply ($24.95) is sufficient because pumps dispense
@@ -157,10 +157,10 @@ ESP32-S3 SPI bus
      '-- XPT2046 touch controller (MOSI/MISO/CLK/CS/IRQ)
          [tap screen to start recording — replaces physical button]
 
-ESP32-S3 I2C bus (SDA/SCL)
-     |-- PCF8574 #1 (0x20) -> Relay board 1 -> Pumps 1-8   (flavors 1-8)
-     |-- PCF8574 #2 (0x21) -> Relay board 2 -> Pumps 9-16  (flavors 9-16)
-     '-- PCF8574 #3 (0x22) -> Relay board 3 -> Pumps 17-24 (flavors 17-24)
+ESP32-S3 I2C (SDA/SCL via STEMMA QT daisy chain)
+     |-- MCP23017 #1 (0x20) -> 16 pins -> relay boards 1+2 -> pumps 1-16
+     '-- MCP23017 #2 (0x21) ->  8 pins -> relay board 3   -> pumps 17-24
+                                (8 pins spare for future expansion to 32 pumps)
 
 ESP32-S3 I2S -> INMP441 microphone (SCK/WS/SD)
 ESP32-S3 GPIO -> Relay -> 12V diaphragm pump (soda water)
