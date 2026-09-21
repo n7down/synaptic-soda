@@ -85,24 +85,33 @@ With 24 flavors and variable ratios (summing to 20 units across 3-6 active flavo
 
 ## Hardware
 
-| Component                                      | Qty | Est. Cost     |
-|------------------------------------------------|-----|---------------|
-| ESP32 dev board                                | 1   | $8            |
-| INMP441 I2S microphone                         | 1   | $3            |
-| Peristaltic pumps 12V food-grade (syrups)      | 24  | $72-144       |
-| 12V diaphragm pump (soda water)                | 1   | $12-18        |
-| 8-channel relay boards (5V trigger)            | 3   | $15           |
-| PCF8574 I2C I/O expanders                      | 3   | $6            |
-| 12V / 15A power supply                         | 1   | $20           |
-| 5V power supply (ESP32 + logic)                | 1   | $8            |
-| Food-grade silicone tubing                     | —   | $15           |
-| 128x64 OLED display (I2C, SSD1306)             | 1   | $5            |
-| Momentary pushbutton (push-to-talk)            | 1   | $1            |
-| Enclosure (wood/acrylic/3D print)              | 1   | $30-80        |
-| Misc (wiring, connectors, clips)               | —   | $20           |
-| **Hardware total**                             |     | **~$215-343** |
-| Syrups (Torani/Monin 750ml x24)                | 24  | ~$200-290     |
-| **Grand total**                                |     | **~$415-633** |
+Prices sourced from Adafruit (adafruit.com) and AliExpress, September 2026.
+Two budget scenarios: **budget** (AliExpress pumps, 3-4 week shipping) and
+**fast** (Adafruit/Amazon, ships immediately).
+
+| Component                                          | Qty | Unit Price        | Budget Total | Fast Total  | Source                    |
+|----------------------------------------------------|-----|-------------------|--------------|-------------|---------------------------|
+| ESP32-S3-DevKitC-1 (32MB Flash, 16MB PSRAM)       | 1   | $19.95            | $19.95       | $19.95      | Adafruit #5364            |
+| INMP441 I2S microphone                             | 1   | ~$3-5             | $5.00        | $5.00       | AliExpress                |
+| Peristaltic pumps 12V food-grade (syrups + spares) | 27  | $5 / $24.95       | $135.00      | $673.65     | AliExpress / Adafruit #1150 |
+| 12V diaphragm pump (soda water)                    | 1   | ~$12-15           | $15.00       | $15.00      | AliExpress                |
+| 3.5" ILI9488 TFT touchscreen + XPT2046 touch (SPI)| 1   | ~$15              | $15.00       | $15.00      | AliExpress                |
+| 8-channel relay boards (5V trigger)                | 3   | ~$5               | $15.00       | $15.00      | AliExpress                |
+| PCF8574 I2C I/O expanders                          | 3   | ~$2               | $6.00        | $6.00       | AliExpress                |
+| 12V 5A switching power supply                      | 1   | $24.95            | $24.95       | $24.95      | Adafruit #352             |
+| 5V USB power supply (ESP32 + logic)                | 1   | ~$8               | $8.00        | $8.00       | AliExpress                |
+| Food-grade silicone tubing (1m rolls)              | 3   | $3.50             | $10.50       | $10.50      | Adafruit #3659            |
+| Enclosure (wood/acrylic/3D print)                  | 1   | $30-80            | $30.00       | $80.00      | Local/hardware store      |
+| Misc (wiring, connectors, hot glue)                | —   | —                 | $20.00       | $20.00      | Hardware store            |
+| **Electronics subtotal**                           |     |                   | **~$304**    | **~$893**   |                           |
+| Syrups (Torani/Monin 750ml x24, ~$10 each)         | 24  | ~$10              | $240.00      | $240.00     | Grocery/online            |
+| **Grand total**                                    |     |                   | **~$544**    | **~$1,133** |                           |
+
+### Power supply note
+The Adafruit 12V 5A supply ($24.95) is sufficient because pumps dispense
+**sequentially** (water first, then syrups one at a time) — peak draw stays
+at 1-2 pumps simultaneously (~1-2A). If you ever want parallel dispensing,
+upgrade to a 12V 10A supply (~$20-25 on AliExpress).
 
 ### Pump sourcing notes
 - Syrups: search `12V peristaltic pump food grade silicone tube` on AliExpress (~$3-5 each)
@@ -143,35 +152,39 @@ https://www.youtube.com/watch?v=kBb56968ixI
 ## Wiring Overview
 
 ```
-ESP32 GPIO 21/22 (I2C SDA/SCL)
+ESP32-S3 SPI bus
+     |-- ILI9488 TFT display  (MOSI/CLK/CS/DC/RST)
+     '-- XPT2046 touch controller (MOSI/MISO/CLK/CS/IRQ)
+         [tap screen to start recording — replaces physical button]
+
+ESP32-S3 I2C bus (SDA/SCL)
      |-- PCF8574 #1 (0x20) -> Relay board 1 -> Pumps 1-8   (flavors 1-8)
      |-- PCF8574 #2 (0x21) -> Relay board 2 -> Pumps 9-16  (flavors 9-16)
-     |-- PCF8574 #3 (0x22) -> Relay board 3 -> Pumps 17-24 (flavors 17-24)
-     '-- OLED SSD1306 (0x3C)
+     '-- PCF8574 #3 (0x22) -> Relay board 3 -> Pumps 17-24 (flavors 17-24)
 
-ESP32 GPIO 25/26/35 -> I2S mic (SCK/WS/SD)
-ESP32 GPIO 27       -> Relay -> 12V diaphragm pump (soda water)
-ESP32 GPIO 0        -> Pushbutton (push-to-talk, active LOW)
+ESP32-S3 I2S -> INMP441 microphone (SCK/WS/SD)
+ESP32-S3 GPIO -> Relay -> 12V diaphragm pump (soda water)
 
 12V PSU -> all pump motors (via relay NO contacts)
-5V PSU  -> ESP32, relay logic, PCF8574s, OLED
+5V PSU  -> ESP32-S3, relay logic, PCF8574s, touchscreen
 
 CRITICAL: Keep 12V pump rail and 5V logic rail on completely separate supplies.
 A damaged or overloaded power supply feeding both rails simultaneously is the
-most likely way to fry the ESP32. Never share grounds carelessly between rails.
+most likely way to fry the ESP32-S3. Never share grounds carelessly between rails.
 ```
 
 ---
 
 ## Software Stack
 
-| Layer              | Tech                                      |
-|--------------------|-------------------------------------------|
-| ESP32 firmware     | Arduino / C++                             |
-| Speech-to-text     | OpenAI Whisper API (HTTP over WiFi)       |
-| AI flavor mapping  | Claude API (claude-sonnet-4-6)            |
-| Pump control       | PCF8574 I2C + timed relay pulses          |
-| Display            | Adafruit SSD1306 library                  |
+| Layer              | Tech                                          |
+|--------------------|-----------------------------------------------|
+| ESP32-S3 firmware  | Arduino / C++                                 |
+| Speech-to-text     | OpenAI Whisper API (HTTP over WiFi)           |
+| AI flavor mapping  | Claude API (claude-sonnet-4-6)                |
+| Pump control       | PCF8574 I2C + timed relay pulses              |
+| Touchscreen        | ILI9488 (TFT_eSPI library) + XPT2046 touch   |
+| UI states          | Idle / Listening / Thinking / Dispensing / Done |
 
 ---
 
@@ -179,13 +192,13 @@ most likely way to fry the ESP32. Never share grounds carelessly between rails.
 
 ```
 firmware/
-  synaptic_soda.ino   - main sketch, button loop, drink cycle
+  synaptic_soda.ino   - main sketch, touch loop, drink cycle
   config.h            - WiFi, API keys, pin definitions, drink params
   mic.h / mic.cpp     - I2S mic init + WAV capture
   whisper.h/.cpp      - Whisper API: WAV -> transcript
   claude.h/.cpp       - Claude API: transcript -> DrinkRecipe JSON
   pumps.h/.cpp        - PCF8574 + relay control + dispense sequence
-  display.h/.cpp      - OLED SSD1306 driver
+  display.h/.cpp      - ILI9488 touchscreen driver + UI states
 
 prompt/
   system_prompt.txt   - Claude system prompt (reference copy)
