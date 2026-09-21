@@ -92,7 +92,7 @@ Two budget scenarios: **budget** (AliExpress pumps, 3-4 week shipping) and
 | Component                                          | Qty | Unit Price        | Budget Total | Fast Total  | Source                    |
 |----------------------------------------------------|-----|-------------------|--------------|-------------|---------------------------|
 | ESP32-S3-DevKitC-1 (32MB Flash, 16MB PSRAM)       | 1   | $19.95            | $19.95       | $19.95      | Adafruit #5364            |
-| INMP441 I2S microphone                             | 1   | ~$3-5             | $5.00        | $5.00       | AliExpress                |
+| SPH0645LM4H I2S MEMS Microphone Breakout           | 1   | $6.95             | $6.95        | $6.95       | Adafruit #3421            |
 | Peristaltic pumps 12V food-grade (syrups + spares) | 27  | $5 / $24.95       | $135.00      | $673.65     | AliExpress / Adafruit #1150 |
 | 12V diaphragm pump (soda water)                    | 1   | ~$12-15           | $15.00       | $15.00      | AliExpress                |
 | 3.5" ILI9488 TFT touchscreen + XPT2046 touch (SPI)| 1   | ~$15              | $15.00       | $15.00      | AliExpress                |
@@ -103,9 +103,9 @@ Two budget scenarios: **budget** (AliExpress pumps, 3-4 week shipping) and
 | Food-grade silicone tubing (1m rolls)              | 3   | $3.50             | $10.50       | $10.50      | Adafruit #3659            |
 | Enclosure (wood/acrylic/3D print)                  | 1   | $30-80            | $30.00       | $80.00      | Local/hardware store      |
 | Misc (wiring, connectors, hot glue)                | —   | —                 | $20.00       | $20.00      | Hardware store            |
-| **Electronics subtotal**                           |     |                   | **~$316**    | **~$904**   |                           |
+| **Electronics subtotal**                           |     |                   | **~$318**    | **~$906**   |                           |
 | Syrups (Torani/Monin 750ml x24, ~$10 each)         | 24  | ~$10              | $240.00      | $240.00     | Grocery/online            |
-| **Grand total**                                    |     |                   | **~$556**    | **~$1,144** |                           |
+| **Grand total**                                    |     |                   | **~$558**    | **~$1,146** |                           |
 
 ### Power supply note
 The Adafruit 12V 5A supply ($24.95) is sufficient because pumps dispense
@@ -162,11 +162,11 @@ ESP32-S3 I2C (SDA/SCL via STEMMA QT daisy chain)
      '-- MCP23017 #2 (0x21) ->  8 pins -> relay board 3   -> pumps 17-24
                                 (8 pins spare for future expansion to 32 pumps)
 
-ESP32-S3 I2S -> INMP441 microphone (SCK/WS/SD)
+ESP32-S3 I2S -> SPH0645LM4H microphone (SCK/WS/SD) - Adafruit #3421
 ESP32-S3 GPIO -> Relay -> 12V diaphragm pump (soda water)
 
 12V PSU -> all pump motors (via relay NO contacts)
-5V PSU  -> ESP32-S3, relay logic, PCF8574s, touchscreen
+5V PSU  -> ESP32-S3, relay logic, MCP23017s, touchscreen
 
 CRITICAL: Keep 12V pump rail and 5V logic rail on completely separate supplies.
 A damaged or overloaded power supply feeding both rails simultaneously is the
