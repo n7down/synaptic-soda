@@ -220,39 +220,119 @@ Example mappings:
 
 ## Build Phases
 
-### Phase 1 — AI Pipeline (no hardware needed)
-- ESP32 WiFi connection
-- I2S mic capture (button -> record 4 sec WAV)
-- HTTP POST to Whisper API -> transcribed text
-- HTTP POST to Claude API -> DrinkRecipe JSON
-- Print recipe to Serial monitor (validate before touching pumps)
+### Phase 0 — Order Parts
+Before writing a single line of code, get everything in hand:
 
-### Phase 2 — Pump Control
-- Wire 1 pump + 1 relay + 1 PCF8574, confirm it runs
-- **Test every pump direction before installing** — flip rotor mechanically if backwards
-- Calibrate timing (ml/sec) for syrup pumps
-- **Apply hot glue strain relief** to all pump wire connectors to prevent broken leads
-- Expand to all 24 syrup pumps
-- Wire and test diaphragm water pump
+| Priority | Item | Source |
+|---|---|---|
+| Order now | ESP32-S3-DevKitC-1 | Adafruit #5364 |
+| Order now | Kamoer NKP pumps × 27 | Amazon B092Z9HR3D |
+| Order now | Soda water pump | Adafruit #1150 |
+| Order now | SunFounder relay boards × 3 | Amazon B00DR9SE4A |
+| Order now | MCP23017 expanders × 2 | Adafruit #5346 |
+| Order now | SPH0645 microphone | Adafruit #3421 |
+| Order now | HX8357D touchscreen | Adafruit #2050 |
+| Order now | Silicone tubing × 3 | Adafruit #3659 |
+| Order now | 12V 5A PSU | Adafruit #352 |
+| Still needed | 5V power supply, STEMMA QT cable, jumper wires, breadboard | Various |
 
-### Phase 3 — OLED Display
-- SSD1306 init
-- "Listening..." while recording
-- "Thinking..." while waiting on Claude
-- Drink name + description while dispensing
+### Phase 1 — AI Pipeline (software only, no hardware)
+**Goal:** Voice → text → Claude → drink recipe printed to Serial. No pumps, no screen.
 
-### Phase 4 — Calibration Tool
-- Python script runs each pump for a fixed time
-- User measures output, enters volume
-- **Dilution normalization**: each syrup has a different concentration — script calculates
-  a scaling factor per pump so 1 unit = equal flavor intensity across all 24 syrups
-- Script outputs calibration + normalization values to paste into config.h
+- Set up Arduino IDE or PlatformIO for ESP32-S3
+- Connect ESP32-S3 via USB, confirm it flashes
+- Connect SPH0645 mic over I2S, record 4-second WAV to PSRAM
+- POST WAV to Whisper API over WiFi, get transcript back
+- POST transcript to Claude API, get DrinkRecipe JSON back
+- Print drink name + flavor ratios to Serial monitor
 
-### Phase 5 — Integration + Enclosure
-- Full end-to-end test
-- Error handling (API failure, WiFi drop, empty bottle)
-- README with wiring diagram
-- Physical enclosure: mount bottles, route tubing, single mixing nozzle
+**Done when:** Speak into the mic and see a drink recipe in the Serial monitor.
+
+### Phase 2 — Single Pump Test
+**Goal:** One pump dispenses on command.
+
+- Wire 1 Kamoer NKP pump → 1 relay channel → 12V PSU
+- Trigger relay directly from ESP32-S3 GPIO (no MCP23017 yet)
+- Confirm pump runs, measure flow rate (ml/sec)
+- Integrate with Phase 1: speak a word, pump runs for calculated duration
+- **Test pump direction** — if backwards, swap the two motor wires (red/black)
+- **Hot glue strain relief** on all pump wire connectors
+
+**Done when:** Speak a word and a pump dispenses a measured amount of liquid.
+
+### Phase 3 — Touchscreen UI
+**Goal:** HX8357D touchscreen shows UI states, tap to record.
+
+- Wire HX8357D over SPI to ESP32-S3
+- Display Adafruit GFX test pattern — confirm screen works
+- Build UI states: Idle / Listening / Thinking / Dispensing / Done
+- Replace Serial trigger with tap-to-record on touchscreen
+- Show drink name + flavor breakdown while dispensing
+
+**Done when:** Full UI works end-to-end with 1 pump.
+
+### Phase 4 — All 24 Pumps
+**Goal:** Scale from 1 pump to 24.
+
+- Wire MCP23017 #1 over I2C (STEMMA QT), confirm I2C address 0x20
+- Wire 8 pumps through relay board 1 via MCP23017 #1
+- Test all 8 pumps individually
+- Add MCP23017 #2 (address 0x21), wire relay boards 2 + 3
+- Test all 24 pumps individually
+- Wire soda water pump on dedicated GPIO relay
+- Run full dispense sequence: water first, then syrups one at a time
+
+**Done when:** All 24 syrup pumps + water pump dispense on command in correct sequence.
+
+### Phase 5 — Calibration
+**Goal:** Each pump dispenses accurate volumes.
+
+- Run each pump for a fixed time (5 seconds), measure output in ml
+- Calculate ml/sec per pump — they will all vary slightly
+- Enter measurements into calibration tool (tools/calibrate.py)
+- Tool outputs calibration constants → paste into config.h
+- **Dilution normalization**: dilute stronger syrups so 1 unit = equal flavor intensity
+  across all 24 — script calculates scaling factor per pump
+
+**Done when:** Each pump dispenses within ±10% of target volume.
+
+### Phase 6 — Full Integration Test
+**Goal:** End-to-end drink from voice to glass.
+
+- Fill syrup bottles with actual syrups (diluted to normalized concentration)
+- Connect soda water source
+- Speak a phrase, get a real drink
+- Taste test — adjust Claude system prompt if recipes are off
+- Test edge cases: unknown words, API failure, WiFi drop
+
+**Done when:** Reliably make a drink from any spoken phrase.
+
+### Phase 7 — Enclosure
+**Goal:** Everything housed cleanly.
+
+- Design or choose enclosure (3D print, laser cut acrylic, or repurposed housing)
+- Mount syrup bottles above or beside pumps
+- Route tubing to single mixing nozzle
+- Mount touchscreen on front panel
+- Secure ESP32-S3, relay boards, MCP23017s inside enclosure
+- Cable management — hot glue strain relief on all pump connectors
+
+**Done when:** Machine looks finished and nothing is dangling.
+
+---
+
+## Phase Summary
+
+| Phase | Hardware needed | Deliverable |
+|---|---|---|
+| 0 | — | All parts ordered |
+| 1 | ESP32-S3 + mic | Voice → Claude → recipe in Serial |
+| 2 | + 1 pump + relay + PSU | Voice → pump dispenses |
+| 3 | + touchscreen | Full UI working |
+| 4 | + all 24 pumps + MCP23017s | All pumps working |
+| 5 | + syrups | Accurate volumes calibrated |
+| 6 | All hardware | Real drinks from voice |
+| 7 | Enclosure materials | Finished machine |
 
 ---
 
