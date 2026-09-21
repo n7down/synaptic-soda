@@ -108,11 +108,17 @@ With 24 flavors and variable ratios (summing to 20 units across 3-6 active flavo
 - Syrups: search `12V peristaltic pump food grade silicone tube` on AliExpress (~$3-5 each)
 - Water: search `12V diaphragm pump food grade self-priming`
 - Brands: INTLLAB, Gikfun, or generic dosing pump listings
+- **Order 3-4 spare syrup pumps** — they break, go out of stock, and are hard to replace mid-build
+- **Test pump direction before installing** — small peristaltic pumps are often assembled in random directions
+  at the factory; test each one, mark direction, and flip the rotor mechanically if backwards (just open
+  the head and reverse the roller insert — no tools needed)
 
 ### Syrup sourcing notes
 - Buy **syrup** form only (not extract, oil, or essence)
 - Water + sugar as first ingredients = water-soluble = safe
 - Coconut, Lavender, Rose: especially important to buy syrup not extract
+- **Syrups have different concentrations** — the calibration tool must include a dilution normalization
+  step so that 1 unit of every flavor has roughly equal taste intensity in the final drink
 
 ---
 
@@ -131,6 +137,10 @@ ESP32 GPIO 0        -> Pushbutton (push-to-talk, active LOW)
 
 12V PSU -> all pump motors (via relay NO contacts)
 5V PSU  -> ESP32, relay logic, PCF8574s, OLED
+
+CRITICAL: Keep 12V pump rail and 5V logic rail on completely separate supplies.
+A damaged or overloaded power supply feeding both rails simultaneously is the
+most likely way to fry the ESP32. Never share grounds carelessly between rails.
 ```
 
 ---
@@ -195,7 +205,9 @@ Example mappings:
 
 ### Phase 2 — Pump Control
 - Wire 1 pump + 1 relay + 1 PCF8574, confirm it runs
+- **Test every pump direction before installing** — flip rotor mechanically if backwards
 - Calibrate timing (ml/sec) for syrup pumps
+- **Apply hot glue strain relief** to all pump wire connectors to prevent broken leads
 - Expand to all 24 syrup pumps
 - Wire and test diaphragm water pump
 
@@ -208,13 +220,36 @@ Example mappings:
 ### Phase 4 — Calibration Tool
 - Python script runs each pump for a fixed time
 - User measures output, enters volume
-- Script outputs calibration values to paste into config.h
+- **Dilution normalization**: each syrup has a different concentration — script calculates
+  a scaling factor per pump so 1 unit = equal flavor intensity across all 24 syrups
+- Script outputs calibration + normalization values to paste into config.h
 
 ### Phase 5 — Integration + Enclosure
 - Full end-to-end test
 - Error handling (API failure, WiFi drop, empty bottle)
 - README with wiring diagram
 - Physical enclosure: mount bottles, route tubing, single mixing nozzle
+
+---
+
+## Lessons from Similar Builds
+
+From a reference build (https://www.youtube.com/watch?v=kBb56968ixI) that used the same
+core concept with ~20 flavors + Raspberry Pi + Gemini AI:
+
+| Problem encountered | Our mitigation |
+|---|---|
+| Pumps arrive wired in random direction | Test + flip all pumps before installing |
+| Two flavors not water-soluble (lavender, capsaicin extract) | Already caught — using syrup form only |
+| Syrups had wildly different concentrations | Dilution normalization in calibration tool |
+| Custom PCB design took weeks to debug | Using ESP32 + breadboard + PCF8574 — no custom PCB |
+| Fried 2x Raspberry Pi from power issues | ESP32 is $8 if fried; strict power rail separation |
+| Broken pump wire leads | Hot glue strain relief on all connectors |
+| Ran out of replacement pumps mid-build | Order 3-4 spares upfront |
+
+Note: the video creator could not identify the specific pump model used — described only
+as "teeny tiny peristaltic pumps" up to $25 each on Amazon. Search
+`12V mini peristaltic pump` on AliExpress for equivalents at $3-5 each.
 
 ---
 
