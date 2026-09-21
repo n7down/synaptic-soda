@@ -96,16 +96,16 @@ Two budget scenarios: **budget** (AliExpress pumps, 3-4 week shipping) and
 | Peristaltic pumps 12V food-grade (syrups + spares) | 27  | $5 / $24.95       | $135.00      | $673.65     | AliExpress / Adafruit #1150 |
 | 12V diaphragm pump (soda water)                    | 1   | ~$12-15           | $15.00       | $15.00      | AliExpress                |
 | 3.5" ILI9488 TFT touchscreen + XPT2046 touch (SPI)| 1   | ~$15              | $15.00       | $15.00      | AliExpress                |
-| 8-channel relay boards (5V trigger)                | 3   | ~$5               | $15.00       | $15.00      | AliExpress                |
+| SunFounder 5V 8-channel relay board                | 3   | $9.89             | $29.67       | $29.67      | Amazon B00DR9SE4A         |
 | MCP23017 I2C GPIO Expander (STEMMA QT)             | 2   | $5.95             | $11.90       | $11.90      | Adafruit #5346            |
 | 12V 5A switching power supply                      | 1   | $24.95            | $24.95       | $24.95      | Adafruit #352             |
 | 5V USB power supply (ESP32 + logic)                | 1   | ~$8               | $8.00        | $8.00       | AliExpress                |
 | Food-grade silicone tubing (1m rolls)              | 3   | $3.50             | $10.50       | $10.50      | Adafruit #3659            |
 | Enclosure (wood/acrylic/3D print)                  | 1   | $30-80            | $30.00       | $80.00      | Local/hardware store      |
 | Misc (wiring, connectors, hot glue)                | —   | —                 | $20.00       | $20.00      | Hardware store            |
-| **Electronics subtotal**                           |     |                   | **~$301**    | **~$889**   |                           |
+| **Electronics subtotal**                           |     |                   | **~$316**    | **~$904**   |                           |
 | Syrups (Torani/Monin 750ml x24, ~$10 each)         | 24  | ~$10              | $240.00      | $240.00     | Grocery/online            |
-| **Grand total**                                    |     |                   | **~$541**    | **~$1,129** |                           |
+| **Grand total**                                    |     |                   | **~$556**    | **~$1,144** |                           |
 
 ### Power supply note
 The Adafruit 12V 5A supply ($24.95) is sufficient because pumps dispense
