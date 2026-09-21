@@ -93,8 +93,8 @@ Two budget scenarios: **budget** (AliExpress pumps, 3-4 week shipping) and
 |----------------------------------------------------|-----|-------------------|--------------|-------------|---------------------------|
 | ESP32-S3-DevKitC-1 (32MB Flash, 16MB PSRAM)       | 1   | $19.95            | $19.95       | $19.95      | Adafruit #5364            |
 | SPH0645LM4H I2S MEMS Microphone Breakout           | 1   | $6.95             | $6.95        | $6.95       | Adafruit #3421            |
-| Peristaltic pumps 12V food-grade (syrups + spares) | 27  | $5 / $24.95       | $135.00      | $673.65     | AliExpress / Adafruit #1150 |
-| 12V diaphragm pump (soda water)                    | 1   | ~$12-15           | $15.00       | $15.00      | AliExpress                |
+| Mini peristaltic pumps 12V (syrups + spares)       | 27  | ~$5               | $135.00      | $135.00     | AliExpress (INTLLAB DS-100 or clone) |
+| Peristaltic pump 12V - soda water                  | 1   | $24.95            | $24.95       | $24.95      | Adafruit #1150            |
 | 3.5" ILI9488 TFT touchscreen + XPT2046 touch (SPI)| 1   | ~$15              | $15.00       | $15.00      | AliExpress                |
 | SunFounder 5V 8-channel relay board                | 3   | $9.89             | $29.67       | $29.67      | Amazon B00DR9SE4A         |
 | MCP23017 I2C GPIO Expander (STEMMA QT)             | 2   | $5.95             | $11.90       | $11.90      | Adafruit #5346            |
@@ -103,9 +103,9 @@ Two budget scenarios: **budget** (AliExpress pumps, 3-4 week shipping) and
 | Food-grade silicone tubing (1m rolls)              | 3   | $3.50             | $10.50       | $10.50      | Adafruit #3659            |
 | Enclosure (wood/acrylic/3D print)                  | 1   | $30-80            | $30.00       | $80.00      | Local/hardware store      |
 | Misc (wiring, connectors, hot glue)                | —   | —                 | $20.00       | $20.00      | Hardware store            |
-| **Electronics subtotal**                           |     |                   | **~$318**    | **~$906**   |                           |
+| **Electronics subtotal**                           |     |                   | **~$328**    | **~$328**   |                           |
 | Syrups (Torani/Monin 750ml x24, ~$10 each)         | 24  | ~$10              | $240.00      | $240.00     | Grocery/online            |
-| **Grand total**                                    |     |                   | **~$558**    | **~$1,146** |                           |
+| **Grand total**                                    |     |                   | **~$568**    | **~$568**   |                           |
 
 ### Power supply note
 The Adafruit 12V 5A supply ($24.95) is sufficient because pumps dispense
