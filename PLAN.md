@@ -113,6 +113,24 @@ With 24 flavors and variable ratios (summing to 20 units across 3-6 active flavo
   at the factory; test each one, mark direction, and flip the rotor mechanically if backwards (just open
   the head and reverse the roller insert — no tools needed)
 
+### Syrup pump identification (from reference build video)
+The pump used in the reference video has these identifying features:
+- **Clear/transparent pump head** with visible rollers inside
+- **DC motor sits directly on top** of the head (inline, not offset)
+- **Very small** — roughly fingertip-sized, ~28-32mm head diameter
+- **3-wire connector** (red, blue, yellow) on the motor
+- Cost up to $25 each on Amazon; available cheaper on AliExpress
+
+Most likely model: **INTLLAB DS-100** or a close clone
+Search terms:
+- `micro peristaltic pump clear head DC`
+- `mini peristaltic dosing pump transparent head`
+- `INTLLAB DS-100 peristaltic pump`
+- `Kamoer micro peristaltic pump`
+
+Check the reference video description for a direct part link:
+https://www.youtube.com/watch?v=kBb56968ixI
+
 ### Syrup sourcing notes
 - Buy **syrup** form only (not extract, oil, or essence)
 - Water + sugar as first ingredients = water-soluble = safe
